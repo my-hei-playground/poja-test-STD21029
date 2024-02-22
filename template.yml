@@ -11,7 +11,12 @@ Globals:
       - x86_64
     Timeout: 600
     
-    
+    VpcConfig:
+      SecurityGroupIds:
+        - !Sub '{{resolve:ssm:/poja-test-29/sg/id}}'
+      SubnetIds:
+        - !Sub '{{resolve:ssm:/poja-test-29/subnet/private1/id}}'
+        - !Sub '{{resolve:ssm:/poja-test-29/subnet/private2/id}}'
     Environment:
       Variables:
         ENV: !Ref Env
@@ -44,7 +49,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Handler: io.imagine.edition.ApiEventHandler::handleRequest
-      MemorySize: 2048
+      MemorySize: 512
       Role: !Sub '{{resolve:ssm:/poja-exam-test-STD21029/${Env}/execution/role-arn}}'
       FileSystemConfigs:
         - Arn: !Sub '{{resolve:ssm:/poja-exam-test-STD21029/${Env}/efs/access-point/arn}}'
@@ -62,7 +67,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Handler: io.imagine.edition.MailboxEventHandler::handleRequest
-      MemorySize: 1024
+      MemorySize: 512
       Role: !Sub '{{resolve:ssm:/poja-exam-test-STD21029/${Env}/execution/role-arn}}'
       FileSystemConfigs:
         - Arn: !Sub '{{resolve:ssm:/poja-exam-test-STD21029/${Env}/efs/access-point/arn}}'
